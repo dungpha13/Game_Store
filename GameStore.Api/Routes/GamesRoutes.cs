@@ -49,17 +49,13 @@ public static class GamesRoutes
                 return Results.NotFound("Sorry, but this game doesn't exist!");
             }
 
-            Game updateGame = new()
-            {
-                Id = id,
-                Name = updateGameDto.Name,
-                Genre = updateGameDto.Genre,
-                Price = updateGameDto.Price,
-                ReleaseDate = updateGameDto.ReleaseDate,
-                ImageUri = updateGameDto.ImageUri
-            };
+            exsitingGame.Name = updateGameDto.Name;
+            exsitingGame.Price = updateGameDto.Price;
+            exsitingGame.Genre = updateGameDto.Genre;
+            exsitingGame.ReleaseDate = updateGameDto.ReleaseDate;
+            exsitingGame.ImageUri = updateGameDto.ImageUri;
 
-            repository.Update(updateGame);
+            repository.Update(exsitingGame);
 
             return Results.NoContent();
 
