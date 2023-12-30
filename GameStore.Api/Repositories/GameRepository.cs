@@ -13,23 +13,23 @@ public class GameRepository : IGamesRepository
         _context = dbContext;
     }
 
-    public IEnumerable<Game> GetGames()
+    public IEnumerable<GameCard> GetGames()
     {
         return _context.Games.AsNoTracking().ToList();
     }
 
-    public Game? GetGame(int id)
+    public GameCard? GetGame(int id)
     {
         return _context.Games.Find(id);
     }
 
-    public void Create(Game game)
+    public void Create(GameCard game)
     {
         _context.Games.Add(game);
         _context.SaveChanges();
     }
 
-    public void Update(Game updatedGame)
+    public void Update(GameCard updatedGame)
     {
         _context.Update(updatedGame);
         _context.SaveChanges();

@@ -1,4 +1,5 @@
 using GameStore.Api.Repositories;
+using GameStore.Api.Repositories.InterFaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameStore.Api.Data;
@@ -20,7 +21,8 @@ public static class DataExtensions
         var connString = configuration.GetConnectionString("GameStoreContext");
 
         services.AddSqlServer<DataBaseContext>(connString)
-                    .AddScoped<IGamesRepository, GameRepository>(); ;
+                    .AddScoped<IGamesRepository, GameRepository>()
+                    .AddScoped<IUsersRepository, UsersRepository>();
 
         return services;
     }

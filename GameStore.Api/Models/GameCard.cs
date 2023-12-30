@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GameStore.Api.Models;
 
-public class Game
+public class GameCard
 {
     public int Id { get; set; }
 
