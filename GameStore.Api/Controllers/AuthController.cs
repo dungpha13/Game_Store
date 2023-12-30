@@ -41,6 +41,11 @@ public class AuthController : ControllerBase
             PasswordHash = passwordHash,
         };
 
+        if (!Enum.TryParse(request.UserRole, out Role role))
+            return BadRequest("Role is invalid!");
+        // else
+        user.UserRole = role;
+
         _repository.Create(user);
 
         return Ok(user.AsUserDto());

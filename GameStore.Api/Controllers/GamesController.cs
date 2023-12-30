@@ -16,13 +16,10 @@ public class GamesController : ControllerBase
         _repository = repository;
     }
 
-    [HttpGet, Authorize]
+    [HttpGet]
     public IActionResult GetGames()
     {
         var games = _repository.GetGames().Select(game => game.AsGameDto());
-
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
 
         return Ok(games);
     }
@@ -32,15 +29,12 @@ public class GamesController : ControllerBase
     {
         GameCard? game = _repository.GetGame(id);
 
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
         return game is not null ?
             Ok(game.AsGameDto()) :
             NotFound("Sorry, but this game doesn't exist!");
     }
 
-    [HttpPost]
+    [HttpPost, Authorize(Roles = "Admin")]
     public IActionResult AddGame(CreateGameDto request)
     {
         GameCard game = new()
@@ -57,36 +51,43 @@ public class GamesController : ControllerBase
         return CreatedAtRoute(nameof(GetGame), new { id = game.Id }, game);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id}"), Authorize(Roles = "Admin")]
     public IActionResult UpdateGame(int id, UpdateGameDto request)
     {
-        GameCard? exsitingGame = _repository.GetGame(id);
+        GameCard? existingGame = _repository.GetGame(id);
 
-        if (exsitingGame is null)
+        if (existingGame is null)
         {
             return NotFound("Sorry, but this game doesn't exist!");
         }
 
-        exsitingGame.Name = request.Name;
-        exsitingGame.Price = request.Price;
-        exsitingGame.Genre = request.Genre;
-        exsitingGame.ReleaseDate = request.ReleaseDate;
-        exsitingGame.ImageUri = request.ImageUri;
+        if (!string.IsNullOrEmpty(request.Name))
+            existingGame.Name = request.Name;
 
-        _repository.Update(exsitingGame);
+        if (request.Price.HasValue)
+            existingGame.Price = request.Price.Value;
+
+        if (!string.IsNullOrEmpty(request.Genre))
+            existingGame.Genre = request.Genre;
+
+        if (request.ReleaseDate.HasValue)
+            existingGame.ReleaseDate = request.ReleaseDate.Value;
+
+        if (!string.IsNullOrEmpty(request.ImageUri))
+            existingGame.ImageUri = request.ImageUri;
+
+        _repository.Update(existingGame);
 
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id}"), Authorize(Roles = "Admin")]
     public IActionResult DeleteGame(int id)
     {
-        GameCard? exsitingGame = _repository.GetGame(id);
+        GameCard? existingGame = _repository.GetGame(id);
 
-        if (exsitingGame is not null)
-        {
-            _repository.Delete(exsitingGame.Id);
-        }
+        if (existingGame is not null)
+            _repository.Delete(existingGame.Id);
 
         return NoContent();
     }

@@ -27,7 +27,7 @@ public class User
 
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-    public Role UserRole { get; set; } = Role.User;
+    public Role UserRole { get; set; }
 
     public Cart Cart { get; set; } = new();
 
