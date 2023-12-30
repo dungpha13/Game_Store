@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using GameStore.Api.Helpers;
 using GameStore.Api.Models;
 using GameStore.Api.Models.DTOs;
 using GameStore.Api.Repositories.InterFaces;
@@ -62,31 +63,9 @@ public class AuthController : ControllerBase
         if (!BCrypt.Net.BCrypt.Verify(request.Password, existingUser.PasswordHash))
             return BadRequest("Email or Password is incorrect!");
 
-        string token = CreateToken(existingUser);
+        string token = JwtHelper.CreateToken(existingUser, _configuration.GetSection("AppSettings:Token").Value!);
 
         return Ok(token);
     }
 
-    private string CreateToken(User user)
-    {
-        List<Claim> claims = new List<Claim> {
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.UserRole.ToString()),
-            };
-
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-            _configuration.GetSection("AppSettings:Token").Value!));
-
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-        var token = new JwtSecurityToken(
-                claims: claims,
-                expires: DateTime.Now.AddDays(1),
-                signingCredentials: creds
-            );
-
-        var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-
-        return jwt;
-    }
 }

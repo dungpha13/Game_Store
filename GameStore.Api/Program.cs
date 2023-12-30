@@ -1,6 +1,5 @@
 using System.Text;
 using GameStore.Api.Data;
-using GameStore.Api.Routes;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
