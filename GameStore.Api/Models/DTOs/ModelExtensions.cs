@@ -25,4 +25,20 @@ public static class ModelExtensions
             game.ImageUri
         );
     }
+    // public static CartDto AsCartDto(this Cart cart)
+    // {
+    //     return new CartDto(
+    //         cart.Id,
+    //         cart.TotalCheckout,
+    //         cart.Items.Select(i => i.AsCartItemDto()).ToList()
+    //     );
+    // }
+
+    // public static CartItemDto AsCartItemDto(this CartItem cartItem)
+    // {
+    //     return new CartItemDto(
+    //         cartItem?.Quantity ?? 0,
+    //         cartItem?.Game.Id ?? -1
+    //     );
+    // }
 }

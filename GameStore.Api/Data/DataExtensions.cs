@@ -22,7 +22,8 @@ public static class DataExtensions
 
         services.AddSqlServer<DataBaseContext>(connString)
                     .AddScoped<IGamesRepository, GameRepository>()
-                    .AddScoped<IUsersRepository, UsersRepository>();
+                    .AddScoped<IUsersRepository, UsersRepository>()
+                    .AddScoped<ICartsRepository, CartsRepository>();
 
         return services;
     }

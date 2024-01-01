@@ -9,4 +9,5 @@ public interface IUsersRepository
     void Update(User updatedUser);
     void Delete(int id);
     User? UserExists(string email);
+    Cart? GetCartByUser(User user);
 }

@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace GameStore.Api.Models;
 
 public class Cart

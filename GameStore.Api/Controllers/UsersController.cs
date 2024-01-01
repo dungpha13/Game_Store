@@ -27,14 +27,12 @@ public class UsersController : ControllerBase
         {
             var userEmail = userIdentity.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 
-            User? user = _repository.GetUser(id);
+            User? user = _repository.UserExists(userEmail!);
 
             if (user is null)
                 return NotFound("Sorry, but this user doesn't exist!");
 
-            return user.Email == userEmail
-                ? Ok(user.AsUserDto())
-                : Unauthorized("You are not authorized to access this user!");
+            return Ok(user);
         }
 
         return Unauthorized("You are not authorized to access this user!");
@@ -114,4 +112,25 @@ public class UsersController : ControllerBase
 
     }
 
+    [HttpGet, Authorize]
+    public IActionResult GetCart()
+    {
+        var userIdentity = HttpContext.User;
+
+        if (userIdentity.Identity?.IsAuthenticated == true)
+        {
+            var userEmail = userIdentity.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+
+            User? user = _repository.UserExists(userEmail!);
+
+            if (user is null)
+                return NotFound("Sorry, but this user doesn't exist!");
+
+            var cart = _repository.GetCartByUser(user);
+
+            return Ok(cart);
+        }
+
+        return Unauthorized("You are not authorized to access this user!");
+    }
 }

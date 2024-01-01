@@ -16,7 +16,6 @@ public class AuthController : ControllerBase
 {
     private readonly IConfiguration _configuration;
     private readonly IUsersRepository _repository;
-
     public AuthController(IConfiguration configuration, IUsersRepository repository)
     {
         _repository = repository;
@@ -40,6 +39,7 @@ public class AuthController : ControllerBase
             Email = request.Email,
             ImageUri = request.ImageUri,
             PasswordHash = passwordHash,
+            Cart = new Cart()
         };
 
         if (!Enum.TryParse(request.UserRole, out Role role))
@@ -67,5 +67,4 @@ public class AuthController : ControllerBase
 
         return Ok(token);
     }
-
 }

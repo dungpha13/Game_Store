@@ -8,9 +8,9 @@ public class GameRepository : IGamesRepository
 {
     private readonly DataBaseContext _context;
 
-    public GameRepository(DataBaseContext dbContext)
+    public GameRepository(DataBaseContext context)
     {
-        _context = dbContext;
+        _context = context;
     }
 
     public IEnumerable<GameCard> GetGames()
@@ -39,5 +39,10 @@ public class GameRepository : IGamesRepository
     {
         _context.Games.Where(game => game.Id == id)
                         .ExecuteDelete();
+    }
+
+    public bool ExistGame(int id)
+    {
+        return _context.Games.Any(g => g.Id == id);
     }
 }

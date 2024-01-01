@@ -25,12 +25,4 @@ app.Services.InitializeDb();
 
 app.MapControllers();
 
-// app.MapGamesRoute();
-
-// app.MapUsersRoute();
-
-// app.MapAuthRoute();
-
-// app.MapCartsRoute();
-
 app.Run();

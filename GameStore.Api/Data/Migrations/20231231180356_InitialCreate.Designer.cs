@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameStore.Api.Data.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20231230162651_InitialCreate")]
+    [Migration("20231231180356_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -43,29 +43,15 @@ namespace GameStore.Api.Data.Migrations
 
             modelBuilder.Entity("GameStore.Api.Models.CartItem", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<int>("CartId")
                         .HasColumnType("int");
 
-                    b.Property<int>("GameId")
+                    b.Property<int>("ItemId")
                         .HasColumnType("int");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.HasKey("CartId", "ItemId");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CartId");
-
-                    b.HasIndex("GameId");
+                    b.HasIndex("ItemId");
 
                     b.ToTable("CartItems");
                 });
@@ -103,6 +89,27 @@ namespace GameStore.Api.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Games");
+                });
+
+            modelBuilder.Entity("GameStore.Api.Models.Item", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GameId");
+
+                    b.ToTable("Items");
                 });
 
             modelBuilder.Entity("GameStore.Api.Models.User", b =>
@@ -161,13 +168,24 @@ namespace GameStore.Api.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("GameStore.Api.Models.Item", "Item")
+                        .WithMany("CartItems")
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("Item");
+                });
+
+            modelBuilder.Entity("GameStore.Api.Models.Item", b =>
+                {
                     b.HasOne("GameStore.Api.Models.GameCard", "Game")
                         .WithMany()
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Cart");
 
                     b.Navigation("Game");
                 });
@@ -186,6 +204,11 @@ namespace GameStore.Api.Data.Migrations
             modelBuilder.Entity("GameStore.Api.Models.Cart", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("GameStore.Api.Models.Item", b =>
+                {
+                    b.Navigation("CartItems");
                 });
 #pragma warning restore 612, 618
         }

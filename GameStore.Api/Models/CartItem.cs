@@ -1,16 +1,17 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace GameStore.Api.Models;
 
 public class CartItem
 {
-    public int Id { get; set; }
+    [JsonIgnore]
+    public int CartId { get; set; }
 
-    [Range(1, 10)]
-    public int Quantity { get; set; }
+    [JsonIgnore]
+    public int ItemId { get; set; }
 
-    [Range(1, 100)]
-    public double Price { get; set; }
-    public required Cart Cart { get; set; }
-    public required GameCard Game { get; set; }
+    [JsonIgnore]
+    public Cart Cart { get; set; }
+    public Item Item { get; set; }
 }

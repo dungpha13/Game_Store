@@ -9,4 +9,5 @@ public interface IGamesRepository
     void Create(GameCard game);
     void Update(GameCard updatedGame);
     void Delete(int id);
+    bool ExistGame(int id);
 }

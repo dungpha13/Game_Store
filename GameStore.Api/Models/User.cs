@@ -29,7 +29,7 @@ public class User
 
     public Role UserRole { get; set; }
 
-    public Cart Cart { get; set; } = new();
+    public required Cart Cart { get; set; }
 
 }
 

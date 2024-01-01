@@ -9,9 +9,9 @@ public class UsersRepository : IUsersRepository
 {
     private readonly DataBaseContext _context;
 
-    public UsersRepository(DataBaseContext dbContext)
+    public UsersRepository(DataBaseContext context)
     {
-        _context = dbContext;
+        _context = context;
     }
 
     public void Create(User user)
@@ -39,6 +39,20 @@ public class UsersRepository : IUsersRepository
 
     public User? UserExists(string email)
     {
-        return _context.Users.FirstOrDefault(user => user.Email == email);
+        return _context.Users
+                .Include(u => u.Cart)
+                    .ThenInclude(c => c.Items)
+                        .ThenInclude(i => i.Item)
+                            .ThenInclude(i => i.Game)
+                .FirstOrDefault(user => user.Email == email);
+    }
+
+    public Cart? GetCartByUser(User user)
+    {
+        return _context.Carts
+                .Include(c => c.Items)
+                    .ThenInclude(i => i.Item)
+                            .ThenInclude(i => i.Game)
+                .FirstOrDefault(c => c.Id == user.Cart.Id);
     }
 }
